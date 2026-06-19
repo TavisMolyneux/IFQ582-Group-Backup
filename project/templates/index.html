@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS (v4.6) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="../static/css/style.css">
+
+  <title>Yarning Collections — Home</title>
+</head>
+<body>
+
+  <!-- ===================== NAVIGATION BAR ===================== -->
+  <!-- Bootstrap navbar with Aboriginal earth-tone styling -->
+  <!-- Maps to: US-1 (Browse), US-4 (Manage Items), US-7 (Access Requests) -->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
+      <div class="container">
+        <a class="navbar-brand" href="index.html">
+          &#x1FA83; Yarning Collections
+        </a>
+        <!-- Toggler for mobile view -->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <!-- Navbar links -->
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#browse">Browse Collection</a>
+            </li>
+            <!-- Staff Portal dropdown — US-4 and US-7 referenced here -->
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="staffDropdown"
+                 data-toggle="dropdown">
+                Staff Portal
+              </a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="assessment.html">Item Assessment</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item disabled" href="#">
+                  Manage Items <span class="staff-label">(Staff Only)</span>
+                </a>
+                <a class="dropdown-item disabled" href="#">
+                  Access Requests <span class="staff-label">(Staff Only)</span>
+                </a>
+              </div>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ===================== MAIN CONTENT ===================== -->
+  <main>
+
+    <!-- ============= HERO / JUMBOTRON SECTION ============= -->
+    <!-- Introduces the platform and references CARE principles -->
+    <div class="jumbotron jumbotron-fluid hero-section">
+      <div class="container">
+        <h1 class="display-4">Welcome to Yarning Collections</h1>
+        <p class="lead">
+          The National Indigenous Knowledge Library (NIKL) is dedicated to preserving
+          and sharing Indigenous cultural heritage. Our digitised collections provide
+          access to important cultural materials in a respectful and ethical manner.
+        </p>
+        <hr class="my-4" style="border-color: rgba(200,87,27,0.4);">
+        <p>
+          All data handling aligns with the
+          <strong>CARE Principles for Indigenous Data Governance</strong> &mdash;
+          promoting collective benefit, community authority, responsibility, and
+          ethical stewardship of Indigenous cultural knowledge.
+        </p>
+      </div>
+    </div>
+
+    <!-- ============= BROWSE COLLECTION SECTION ============= -->
+    <!-- US-1: Browse publicly available Indigenous collection items -->
+    <section id="browse" class="container mb-5">
+      <h2 class="mb-4">Browse Collection</h2>
+      <p>
+        Explore items from our Indigenous collections. Only items that have been
+        reviewed and approved by community elders are available for public viewing.
+      </p>
+
+      <!-- ============= SEARCH & FILTER (US-1 AC3) ============= -->
+      <!-- Allows visitors to search by title or filter by community of origin -->
+      <div class="search-section mb-4">
+        <form class="form-inline">
+          <div class="form-group mr-2 mb-2">
+            <label for="searchTitle" class="sr-only">Search by title</label>
+            <input type="text" class="form-control" id="searchTitle"
+                   placeholder="Search by title...">
+          </div>
+          <div class="form-group mr-2 mb-2">
+            <label for="filterCommunity" class="sr-only">Filter by community</label>
+            <select class="form-control" id="filterCommunity">
+              <option selected>All Communities</option>
+              <option>Wiradjuri</option>
+              <option>Yol&#x014B;u</option>
+              <option>Kunwinjku</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary mb-2">Search</button>
+        </form>
+      </div>
+
+      <div class="row">
+
+        <!-- Card 1: Dreaming Story Scroll (Approved) — US-1 AC1, AC2, AC4 -->
+        <article class="col-md-4 mb-4">
+          <div class="card h-100">
+            <img src="#"
+                 class="card-img-top" alt="Dreaming Story Scroll">
+            <div class="card-body">
+              <h5 class="card-title">Dreaming Story Scroll</h5>
+              <p class="card-text">
+                A hand-painted scroll depicting a creation narrative from the
+                Wiradjuri people.
+              </p>
+              <span class="badge badge-approved">&#x2714; Approved</span>
+            </div>
+            <div class="card-footer text-center">
+              <!-- Only approved items have a clickable View Details button -->
+              <a href="item.html" class="btn btn-primary btn-sm">View Details</a>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2: Ceremony Song Recording (Restricted) — US-1 AC1 -->
+        <article class="col-md-4 mb-4">
+          <div class="card h-100">
+            <img src="#"
+                 class="card-img-top" alt="Ceremony Song Recording">
+            <div class="card-body">
+              <h5 class="card-title">Ceremony Song Recording</h5>
+              <p class="card-text">
+                Audio recording of a ceremonial song from the Yol&#x014B;u community.
+              </p>
+              <span class="badge badge-restricted">&#x1F512; Restricted</span>
+            </div>
+            <div class="card-footer text-center">
+              <!-- Restricted items cannot be viewed — button is disabled -->
+              <button class="btn btn-outline-secondary btn-sm" disabled>
+                &#x1F512; Restricted Access
+              </button>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3: Bark Painting Collection (Pending) — US-1 AC1 -->
+        <article class="col-md-4 mb-4">
+          <div class="card h-100">
+            <img src="#"
+                 class="card-img-top" alt="Bark Painting Collection">
+            <div class="card-body">
+              <h5 class="card-title">Bark Painting Collection</h5>
+              <p class="card-text">
+                Series of bark paintings from Arnhem Land artists depicting
+                seasonal knowledge.
+              </p>
+              <span class="badge badge-pending">&#x23F3; Pending Assessment</span>
+            </div>
+            <div class="card-footer text-center">
+              <!-- Pending items are awaiting elder review — button is disabled -->
+              <button class="btn btn-outline-secondary btn-sm" disabled>
+                Awaiting Review
+              </button>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ===================== -->
+  <!-- Acknowledgement of Country and copyright -->
+  <footer class="text-center">
+    <div class="container">
+      <p class="mb-1">
+        <em>We acknowledge the Traditional Custodians of the lands on which we
+        operate and pay our respects to Elders past, present, and emerging.</em>
+      </p>
+      <p class="mb-0">&copy; 2026 National Indigenous Knowledge Library (NIKL). All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- jQuery, Popper.js, Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+
+</body>
+</html>

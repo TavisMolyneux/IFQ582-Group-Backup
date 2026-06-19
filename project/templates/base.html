@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title or "Library App" }}</title>
+</head>
+<body>
+
+    {% include "nav.html" %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="error-container">
+        <h1>{{ error_code }}</h1>
+        <p>{{ message }}</p>
+
+        <a href="{{ url_for('home') }}">Return home</a>
+    </div>
+{% endblock %}

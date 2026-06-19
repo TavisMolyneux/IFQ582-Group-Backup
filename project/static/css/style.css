@@ -1,0 +1,213 @@
+/* ============================================
+   Yarning Collections Platform — Custom Styles
+   IFQ582 Assignment 1 Part B
+   
+   Aboriginal-inspired colour palette:
+   - Deep ochre:      #C8571B (accent, buttons)
+   - Dark earth:      #2D2118 (navbar, footer, headings)
+   - Rich maroon:     #6B1A1A (restricted)
+   - Sand/cream:      #F5E6CA (body background)
+   - Warm gold:       #DAA520 (pending, warnings)
+   - Olive green:     #4A6741 (approved, success)
+   - Off-white:       #FFF8F0 (card backgrounds)
+   - Soft brown:      #8B6914 (links)
+   ============================================ */
+
+/* -- Google Font -- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap');
+
+/* -- General body styles -- */
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #F5E6CA;
+  color: #2D2118;
+}
+
+/* -- Navbar customisation -- */
+.navbar-custom {
+  background-color: #2D2118;
+}
+
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+  color: #F5E6CA !important;
+}
+
+.navbar-custom .nav-link:hover {
+  color: #C8571B !important;
+}
+
+.navbar-custom .dropdown-menu {
+  background-color: #2D2118;
+  border: 1px solid #C8571B;
+}
+
+.navbar-custom .dropdown-item {
+  color: #F5E6CA;
+}
+
+.navbar-custom .dropdown-item:hover {
+  background-color: #C8571B;
+  color: #FFF8F0;
+}
+
+.navbar-custom .dropdown-item.disabled {
+  color: #8B7355;
+}
+
+/* -- Heading colours -- */
+h1, h2, h3, h4, h5 {
+  color: #2D2118;
+}
+
+/* -- Jumbotron / hero section -- */
+.hero-section {
+  background-color: #2D2118;
+  color: #F5E6CA;
+  padding: 60px 20px;
+  border-radius: 0;
+  margin-bottom: 30px;
+  border-bottom: 4px solid #C8571B;
+}
+
+.hero-section h1 {
+  color: #C8571B;
+}
+
+.hero-section p {
+  color: #F5E6CA;
+  font-size: 1.1rem;
+}
+
+.hero-section .lead {
+  color: #FFF8F0;
+}
+
+/* -- Card styles -- */
+.card {
+  background-color: #FFF8F0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid #D4B896;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 16px rgba(45, 33, 24, 0.15);
+}
+
+/* -- Access status badges -- */
+.badge-approved {
+  background-color: #4A6741;
+  color: #fff;
+}
+
+.badge-restricted {
+  background-color: #6B1A1A;
+  color: #fff;
+}
+
+.badge-pending {
+  background-color: #DAA520;
+  color: #2D2118;
+}
+
+/* -- Restricted access banner -- */
+.restricted-banner {
+  background-color: #DAA520;
+  border-bottom: 2px solid #C8571B;
+  color: #2D2118;
+  padding: 12px 20px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* -- Cultural metadata section -- */
+.metadata-card {
+  background-color: #FFF8F0;
+  border-left: 4px solid #C8571B;
+}
+
+/* -- Discussion comments -- */
+.comment-box {
+  background-color: #F5E6CA;
+  border-left: 3px solid #C8571B;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+}
+
+.comment-box .comment-author {
+  font-weight: 600;
+  color: #2D2118;
+}
+
+.comment-box .comment-date {
+  font-size: 0.85rem;
+  color: #8B7355;
+}
+
+/* -- Search and filter section -- */
+.search-section {
+  background-color: #FFF8F0;
+  padding: 20px;
+  border-radius: 4px;
+  border: 1px solid #D4B896;
+  margin-bottom: 25px;
+}
+
+/* -- Footer -- */
+footer {
+  background-color: #2D2118;
+  color: #F5E6CA;
+  padding: 20px 0;
+  margin-top: 40px;
+  border-top: 4px solid #C8571B;
+}
+
+footer a {
+  color: #C8571B;
+}
+
+/* -- Primary button (ochre) -- */
+.btn-primary {
+  background-color: #C8571B;
+  border-color: #C8571B;
+  color: #FFF8F0;
+}
+
+.btn-primary:hover {
+  background-color: #A6481A;
+  border-color: #A6481A;
+}
+
+/* -- Outline buttons -- */
+.btn-outline-ochre {
+  color: #C8571B;
+  border-color: #C8571B;
+}
+
+.btn-outline-ochre:hover {
+  background-color: #C8571B;
+  color: #FFF8F0;
+}
+
+/* -- Links -- */
+a {
+  color: #8B6914;
+}
+
+a:hover {
+  color: #C8571B;
+}
+
+/* -- Breadcrumb -- */
+.breadcrumb {
+  background-color: #FFF8F0;
+}
+
+/* -- Staff-only label -- */
+.staff-label {
+  font-size: 0.7rem;
+  color: #DAA520;
+  font-style: italic;
+}
