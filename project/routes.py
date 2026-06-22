@@ -47,7 +47,7 @@ def home():
     cursor = conn.cursor()
     cursor.execute("""
         SELECT i.id, i.title, i.description, i.access_status, i.image,
-            c.name as category_name
+            c.name AS category_name,
             cm.cultural_group, cm.sensitivity_level
         FROM items i
         JOIN categories c ON i.category_id = c.id
@@ -55,8 +55,8 @@ def home():
     """)
     items = cursor.fetchall()
     conn.close()
-    user = session.get("user")
-    return render_template("index.html", user=user)
+    
+    return render_template("index.html", items=items, user=session.get("user"))
 
 
 @app.route("/item/<int:item_id>")
