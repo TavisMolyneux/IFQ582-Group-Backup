@@ -1,31 +1,12 @@
 from flask import render_template, session, redirect, url_for, request
 from werkzeug.security import check_password_hash, generate_password_hash
 from functools import wraps
-from enum import Enum
-from project import app, users
+from project import app, get_db
 
 
 
 
 
-
-class AccessStatus(Enum):
-    PUBLIC = "public"
-    RESTRICTED = "restricted"
-    PENDING = "pending"
-
-
-# These are hardcoded item details, not for final submission. need integration to the item DB
-_items = {
-    1: {"title": "Bush Tucker Guide", "content": "...", "accessStatus": AccessStatus.PUBLIC},
-    2: {"title": "Sacred Site Photographs", "content": "...", "accessStatus": AccessStatus.RESTRICTED},
-}
-
-def get_item(item_id):
-    return _items.get(item_id)
-
-def get_all_items():
-    return _items.values()
 
 def login_required(route_function):
     
@@ -62,27 +43,49 @@ def role_required(*roles):
 
 @app.route("/")
 def home():
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT i.id, i.title, i.description, i.access_status, i.image,
+            c.name as category_name
+            cm.cultural_group, cm.sensitivity_level
+        FROM items i
+        JOIN categories c ON i.category_id = c.id
+        JOIN cultural_metadata cm ON cm.item_id = i.id
+    """)
+    items = cursor.fetchall()
+    conn.close()
     user = session.get("user")
     return render_template("index.html", user=user)
 
 
 @app.route("/item/<int:item_id>")
 def item(item_id):
-    item_data = _items.get(item_id)
+    conn = get_db()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT i.*, c.name as category_name,
+            cm.cultural_group, cm.sensitivity_level,
+            cm.cultural_notes, cm.access_conditions
+        FROM items i
+        JOIN categories c ON i.category_id = c.id
+        JOIN cultural_metadata cm ON cm.item_id = i.id
+        WHERE i.id = %s
+    """, (item_id,))
+    item_data = cursor.fetchone()
+    conn.close()
 
     if item_data is None:
-        return render_template("error.html", error_code=404, message="Item not found"), 404
+        return render_template("error.html", error_code = 404, message="Item not found"), 404
 
-    # accessStatus here will need to be updated to whatever we call it in our DB
-    if item_data["accessStatus"] == AccessStatus.RESTRICTED:
-        if session.get("role") not in ("admin", "community_elder"):
-            return render_template("error.html", error_code=403, message="Access denied"), 403
+    if item_data["access_status"] == "Restricted":
+        if session.get("role") not in ("Admin", "Elder", "Staff"):
+            return render_template("error.html", error_code = 403, message="Access denied"), 403
 
     return render_template("item.html", item=item_data)
-
 @app.route("/assessment")
 @login_required
-@role_required("admin","community_elder","library_staff")
+@role_required("Admin","Elder","Staff")
 def assessment():
  
     return render_template("assessment.html")
@@ -90,14 +93,25 @@ def assessment():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form.get("username","").lower().strip()
+        email = request.form.get("email","").lower().strip()
         password = request.form.get("password", "").strip()
 
-        user = users.get(username)
 
-        if user and check_password_hash(user["password"], password):
-            session["user"] = username
-            session["role"] = user["role"]
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT u.id, u.first_name, u.email, u.password_hash, r.role_name
+            FROM users u
+            JOIN roles r ON u.role_id = r.id
+            WHERE u.email = %s AND u.is_active = 1
+        """, (email,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user and check_password_hash(user["password_hash"], password):
+            session["user_id"] = user["id"]
+            session["user"] = user["first_name"]
+            session["role"] = user["role_name"]
 
             next_page = session.pop("next", None)
             if next_page:
@@ -112,27 +126,39 @@ def login():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form.get("username", "").strip().lower()
+        first_name = request.form.get("first_name","").strip()
+        last_name = request.form.get("last_name","").strip()
+        email = request.form.get("email", "").strip().lower()
         password = request.form.get("password", "").strip()
         confirm_password = request.form.get("confirm_password", "").strip()
 
-        if not username or  not password:
+        if not email or not password or not first_name or not last_name:
             return render_template("register.html", error="Username or password empty, please fill all fields")
-
-        
-        if len(username) < 5 or len(username) >15:
-            return render_template("register.html", error="Username must be between 5 and 15 characters")
-        
-        if username in users:
-            return render_template("register.html", error="Username already exists")
 
         if password != confirm_password:
             return render_template("register.html", error="Passwords do not match")
+        
 
-        users[username] = {
-            "password": generate_password_hash(password),
-            "role": "public"
-        }
+        
+        conn = get_db()
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT id FROM users WHERE email = %s", (email,))
+        if cursor.fetchone():
+            conn.close()
+            return render_template("register.html", error="An account with that email already exists")
+        
+
+        # registration defaults users to role_id= 4 
+        # new users are always public 
+        cursor.execute("""
+            INSERT INTO users (first_name, last_name, email, password_hash, role_id)
+            VALUES (%s, %s, %s, %s, 4)  
+        """, (first_name, last_name, email, generate_password_hash(password)))
+
+        conn.commit()
+        conn.close()
+
 
         return redirect(url_for("login"))
 
