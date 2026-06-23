@@ -83,12 +83,92 @@ def item(item_id):
             return render_template("error.html", error_code = 403, message="Access denied"), 403
 
     return render_template("item.html", item=item_data)
+
 @app.route("/assessment")
 @login_required
 @role_required("Admin","Elder","Staff")
 def assessment():
- 
-    return render_template("assessment.html")
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            SELECT
+                a.id,
+                a.status,
+                a.date_initiated,
+                i.title AS item_title,
+                i.access_status,
+                u.first_name,
+                u.last_name
+            FROM assessments a
+            JOIN items i ON a.item_id = i.id
+            JOIN users u ON a.initiated_by = u.id
+            ORDER BY FIELD(a.status, 'In Progress', 'Completed'), a.date_initiated DESC
+        """)
+        assessments = cursor.fetchall()
+        return render_template("assessment_list", assessments=assessments)
+   
+    finally:
+        conn.close()
+
+@app.route("/assessment/<int:assessment_id>", methods=["GET", "POST"])
+@login_required
+@role_required("Admin","Elder","Staff")
+def assessment_details(assessment_id):
+    conn = get_db()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("""
+            SELECT
+                a.id, a.status, a.date_initiated,
+                i.id AS item_id, i.title, i.description,
+                i.access_status, i.format, i.image,
+                cm.cultural_group, cm.sensitivity_level, cm.cultural_notes,
+                u.first_name, u.last_name
+            FROM assessments a
+            JOIN items i ON a.item_id = i.id
+            JOIN cultural_metadata cm ON cm.item_id = i.id
+            JOIN users u ON a.initiated_by = u.id
+            WHERE a.id = %s
+        """, (assessment_id,))
+        assessment = cursor.fetchone()     
+
+        if assessment is None:
+            return render_template("error.html", error_code=404, message = "Assessment not found"), 404
+
+        cursor.execute("""
+            SELECT
+                d.comment, d.date_posted,
+                u.first_name, u.last_name,
+                r.role_name
+            FROM discussions d
+            JOIN users u ON d.user_id = u.id
+            JOIN roles r ON u.role_id = r.id
+            WHERE d.assessment_id = %s
+            ORDER BY d.date_posted ASC
+        """, (assessment_id,))
+        comments = cursor.fetchall()
+
+        cursor.execute("""
+            SELECT
+                dec.outcome, dec.rationale, dec.date_decided,
+                u.first_name, u.last_name
+            FROM decisions dec
+            JOIN users u ON dec.user_id = u.id
+            WHERE dec.assessments_id = %s
+        """, (assessment_id,))
+        decision = cursor.fetchone()
+
+        return render_template("assessment_detail.html",
+                               assessment = assessment,
+                               comments = comments,
+                               decision = decision,
+                               role=session.get("role"))
+
+    finally:
+        conn.close()
+
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
